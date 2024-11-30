@@ -1,0 +1,19 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: aws-sqs-queue-scaledobject
+  namespace: default
+spec:
+  scaleTargetRef:
+    name: nginx-deployment
+  minReplicaCount: 0
+  maxReplicaCount: 5
+  pollingInterval: 5
+  cooldownPeriod:  25
+  triggers:
+  - type: aws-sqs-queue
+    metadata:
+      queueURL: https://sqs.us-east-1.amazonaws.com/445567095330/keda-sqs
+      queueLength: "15"
+      awsRegion: "us-east-1"
+      identityOwner: operator
